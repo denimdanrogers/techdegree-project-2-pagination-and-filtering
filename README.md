@@ -1,0 +1,1 @@
+The included files have been created by Daniel Rogers. They are to be submitted for the Treehouse JS Techdegree Project 2: Data Pagination and Filtering.
