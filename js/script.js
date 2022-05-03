@@ -139,7 +139,7 @@ function studentSearch() {
       searchArr = [];
       for (let i = 0; i < data.length; i++) {
          let name = `${data[i].name.first} ${data[i].name.last}`;
-         if (name.toLowerCase().includes(searchValue)) {
+         if (name.toLowerCase().includes(searchValue.toLowerCase())) {
             searchArr.push(data[i]);
          };
       };
