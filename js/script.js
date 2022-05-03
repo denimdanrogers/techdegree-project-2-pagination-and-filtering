@@ -9,43 +9,47 @@ function showPage(list, page) {
    const studentLastIndex = (page*9);
    const studentList = document.querySelector(".student-list");
    studentList.innerHTML = '';
-
-   for (let i = 0; i < list.length; i++) {
-      if (i >= studentFirstIndex && i < studentLastIndex) {
-         // li
-         const li = document.createElement("li");
-         li.className = "student-item";
-         // div
-         const div = document.createElement("div");
-         div.classname = "student-details";
-         // picture
-         const picture = document.createElement("img");
-         picture.src = list[i].picture.medium;
-         picture.alt = `${list[i].name.first} ${list[i].name.last}`;
-         picture.className = "avatar";
-         div.appendChild(picture);
-         // name
-         const name = document.createElement("h3");
-         name.textContent = `${list[i].name.first} ${list[i].name.last}`;
-         div.appendChild(name);
-         // email
-         const email = document.createElement("span");
-         email.className = "email";
-         email.textContent = list[i].email;
-         div.appendChild(email);
-         // append first div
-         li.appendChild(div);
-         // joined date
-         const div2 = document.createElement("div");
-         div2.className = "joined-details";
-         const joined = document.createElement("span");
-         joined.className = "date";
-         joined.textContent = list[i].registered.date;
-         // append 2nd div
-         div2.appendChild(joined);
-         li.appendChild(div2);
-         //append li
-         studentList.appendChild(li);
+   if (list.length === 0) {
+      const li = `<li>No Results Found</li>`;
+      studentList.insertAdjacentHTML("afterbegin", li);
+   } else {
+      for (let i = 0; i < list.length; i++) {
+         if (i >= studentFirstIndex && i < studentLastIndex) {
+            // li
+            const li = document.createElement("li");
+            li.className = "student-item";
+            // div
+            const div = document.createElement("div");
+            div.classname = "student-details";
+            // picture
+            const picture = document.createElement("img");
+            picture.src = list[i].picture.medium;
+            picture.alt = `${list[i].name.first} ${list[i].name.last}`;
+            picture.className = "avatar";
+            div.appendChild(picture);
+            // name
+            const name = document.createElement("h3");
+            name.textContent = `${list[i].name.first} ${list[i].name.last}`;
+            div.appendChild(name);
+            // email
+            const email = document.createElement("span");
+            email.className = "email";
+            email.textContent = list[i].email;
+            div.appendChild(email);
+            // append first div
+            li.appendChild(div);
+            // joined date
+            const div2 = document.createElement("div");
+            div2.className = "joined-details";
+            const joined = document.createElement("span");
+            joined.className = "date";
+            joined.textContent = list[i].registered.date;
+            // append 2nd div
+            div2.appendChild(joined);
+            li.appendChild(div2);
+            //append li
+            studentList.appendChild(li);
+         };
       };
    };
 };
@@ -54,23 +58,35 @@ function addPagination(list) {
    const numOfPages = Math.ceil(list.length / 9);
    const linkList = document.querySelector(".link-list");
    linkList.innerHTML = '';
-   for (let i = 1; i <= numOfPages; i++) {
+   if (list.length === 0) {
       const li = document.createElement("li")
       const bttn = document.createElement("button");
       bttn.type = "button";
-      bttn.textContent = i;
+      bttn.className = "active";
+      bttn.textContent = "Clear Search";
       li.insertAdjacentElement("beforeend", bttn);
       linkList.insertAdjacentElement("beforeend", li);
-   };
+   } else {
+      for (let i = 1; i <= numOfPages; i++) {
+         const li = document.createElement("li")
+         const bttn = document.createElement("button");
+         bttn.type = "button";
+         bttn.textContent = i;
+         li.insertAdjacentElement("beforeend", bttn);
+         linkList.insertAdjacentElement("beforeend", li);
+         };
+      };
    linkList.querySelector("button").className = "active";
    document.querySelector(".link-list").addEventListener("click", (e)=> {
       if (e.target.type === "button") {
-         let activeBttn = document.querySelector(".active");
-         activeBttn.className = '';
-         e.target.className = 'active';
-         showPage(data, e.target.textContent);
-         document.body.scrollTop = 0; // For Safari
-         document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+         if (e.target.textContent !== "Clear Search") {
+            let activeBttn = document.querySelector(".active");
+            activeBttn.className = '';
+            e.target.className = 'active';
+            showPage(data, e.target.textContent);
+            document.body.scrollTop = 0; // For Safari
+            document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+            };   
          };
       });
    };
@@ -127,14 +143,20 @@ function studentSearch() {
             searchArr.push(data[i]);
          };
       };
-      if (searchArr.length === 0) {
-         document.querySelector(".student-list").innerHTML = "<li>`No results found</li>";
-      } else {
-         showPage(searchArr, 1);
-         addPagination(searchArr);
-      };
+      showPage(searchArr, 1);
+      addPagination(searchArr);
    })
+   // Clear Search event listener
+   document.querySelector(".link-list").addEventListener("click", (e)=> {
+      if (e.target.textContent === "Clear Search") {
+         input.value = '';
+         showPage(data, 1);
+         addPagination(data);
+         };
+      });
 };
+
+
 
 // Init functions
 showPage(data, 1);
