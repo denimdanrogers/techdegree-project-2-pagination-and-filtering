@@ -3,6 +3,7 @@ Treehouse Techdegree:
 FSJS Project 2 - Data Pagination and Filtering
 */
 
+let searchArr = [];
 // This function will create and insert/append the elements needed to display a "page" of nine students
 function showPage(list, page) {
    const studentFirstIndex = (page*9)-9;
@@ -83,7 +84,7 @@ function addPagination(list) {
             let activeBttn = document.querySelector(".active");
             activeBttn.className = '';
             e.target.className = 'active';
-            showPage(data, e.target.textContent);
+            showPage(list, e.target.textContent);
             document.body.scrollTop = 0; // For Safari
             document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
             };   
@@ -117,7 +118,6 @@ function studentSearch() {
    // search button click event listener
    const searchButton = document.querySelector(".search-button");
    searchButton.addEventListener("click", ()=> {
-      let searchArr = [];
       let searchValue = input.value;
       for (let i = 0; i < data.length; i++) {
          let name = `${data[i].name.first} ${data[i].name.last}`;
@@ -135,8 +135,8 @@ function studentSearch() {
    // search input keyup event listener
    const searchInput = document.querySelector("#search");
    searchInput.addEventListener("keyup", ()=> {
-      let searchArr = [];
       let searchValue = input.value;
+      searchArr = [];
       for (let i = 0; i < data.length; i++) {
          let name = `${data[i].name.first} ${data[i].name.last}`;
          if (name.toLowerCase().includes(searchValue)) {
@@ -145,7 +145,7 @@ function studentSearch() {
       };
       showPage(searchArr, 1);
       addPagination(searchArr);
-   })
+   }) 
    // Clear Search event listener
    document.querySelector(".link-list").addEventListener("click", (e)=> {
       if (e.target.textContent === "Clear Search") {
